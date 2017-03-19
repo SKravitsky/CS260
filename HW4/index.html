@@ -1,0 +1,272 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+	<meta http-equiv="Content-Language" content="en-us">
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Expires" content="no-expire">
+  <meta name="Author" content="Jeremy R. Johnson">
+	<meta name="Publisher" content="Drexel University">
+	<meta name="Copyright" content="">
+	<meta name="Keywords" content="Programming Techniques Unix">
+	<meta name="Description" content="Assignment for CS260">
+	<meta name="Pagetype" content="Lab">
+	<meta name="Audience" content="All">
+	<link rel='shortcut icon' type='image/gif'
+		href='../../images/drexel.gif'></link>
+	<script language="JavaScript" src="../../courseInfo.js"></script>
+	<script language="JavaScript" src="../../../Scripts/courseFormat.js"></script>
+  <title>CS 260 -- HW 4</title>
+</head>
+
+<body text="#330099" link="#000066" vlink="#000066" alink="#FF0000"
+	background="../../../images/blueTexture.jpeg">
+
+<h1>HW 4</h1>
+
+<h2>1 Theory</h2>
+
+<p>Do the following problems from the text:</p>
+
+<ol>
+	<li>A binary tree has <i>n</i> nodes. What is the maximum height of the
+	tree?  What is the minimum height? Explain your answers.</li>
+
+	<li>A tree (not necessarily a binary tree) has n nodes. What are the
+	minimum and maximum possible heights of the tree? Explain your
+	answer.</li>
+
+	<li>4.6</li>
+	<li>4.7</li>
+
+	<!--
+	<li>Sometimes it is of interest to use hash functions without actually
+	wanting to keep a hash table. An example of this is called a checksum. TCP
+	(the transmission control protocol, a connection-oriented protocol for
+	internet traffic), for example, computes checksums of data. Each packet
+	sent contains a payload (the data you think you.re sending) plus some
+	control information that includes a checksum of the payload. The receiver
+	of the data computes the checksum of the payload as well. If the computed
+	checksum disagrees with the received checksum, the data was corrupted in
+	transit and is requested to be resent. Explain why this is a form of
+	hashing.
+	-->
+
+	<li>Following are several hash functions. None of them are very good as
+	hash functions.  Explain why they are not good hash functions.
+		<ol>
+			<li>Hash keys are character strings. The hash function h1(x) computes
+				the length of the string.</li>
+			<li>The function h2(x) computes a random number r with 1 &#x2264; r
+				&#x2264; B, where B is the number of buckets. It returns r.</li>
+			<!--
+			<li>Recall that files are usually stored on disk in blocks. Hash keys
+			are 512 byte blocks of files, some of which are tar archives, which
+			(you can check by running tar) typically contain long strings of
+			zeroes as padding. The hash function h3(x) considers the byte stream
+			as a stream of integers. (So four characters in a row are viewed as a
+			32 bit integer, since c1c2c3c4 is really 32 bits arriving as eight
+			bits four times. If the length of the file is not divisible by four, a
+			few zeroes are appended to make it a multiple of four.) The hash
+			function h3(x) computes the sum of these integers mod
+			2<sup>32</sup>:
+			<blockquote><i>h3(x)</i> = Sum(i)[ <i>x<sub>i</sub></i> mod
+				2<sup>32</sup> ]</blockquote>
+			<p>where <i>x<sub>i</sub></i> is the i-th integer as described above.
+			(Hint: How does changing the position of bytes affect the value of the
+			hash?)</p>
+			-->
+		</ol>
+	</li>
+	<li>Design an efficient data structure for representing a subset <i>S</i>
+	of the integers from 1 to <i>n</i>. The operations we wish to perform are
+	these:
+		<ol>
+			<li>Select an integer <i>i</i> from the set and delete it.</li>
+			<li>Add an integer <i>i</i> to the set.</li>
+		</ol>
+
+		<p>A mechanism must be provided to ignore a request to add integer
+		<i>i</i> to <i>S</i> in the case where <i>S</i> alrady contains
+		<i>i</i>. The data structure must be such that the time to select and
+		delete an element and the time to add an element are constant and not
+		dependent on ||<i>S</i>||, the size of <i>S</i>.</p>
+
+		<!--
+		<p>What if <i>n</i> is not known before the program starts running,
+		although it is known to be constant? How does this change your answer?
+		(Hint: You may use more than one data structure if it helps you.)
+		-->
+		
+		<p>Analyze the time and space complexity of your algorithms.
+	</li>
+	<li>Write a procedure (in pseudocode!) to increase the number of buckets
+	in a (closed) hash table. Analyze its time and space complexity.</li>
+
+	<!--
+	<li>You have a fixed number B of buckets. You never delete things from
+	your hash table.  Describe the performance of your hash table under open
+	versus closed hashing.  Describe this mathematically if you can, but you
+	will receive partial credit for a good non-mathematical description.
+	-->
+
+	<!--
+	<li>Extra credit: You have a program that uses a set data structure and
+	the usual operations on it: Insert, Delete, Membership-Test, Union,
+	Intersection, and Difference. Your boss tells you that you must now also
+	support the operation Find-Min. Fortunately, you can simply replace the
+	file set.py with a new file that implements set operations with the added
+	data structure. Design a data structure for sets with Find-Min. Provide
+	pseudo-code to explain how to use your algorithm where it differs from
+	data structures and algorithms we have seen in class or in the book.</li>
+	</li>
+	-->
+</ol>
+
+
+<h2>2 Implementation</h2>
+
+<p><i> This is to be done on the CS machines (tux.cs.drexel.edu , or one of 
+the lab machines in UCross 151), and submitted using <a 
+href='http://www.cs.drexel.edu/~kschmidt/Ref/submit_cli.html'> 
+<tt>submit_cli</tt> </a> </i> </p>
+
+<p>For you to do:</p>
+
+<ol>
+	<!--
+	<li>(Makefile target: <tt><b>problem1</b></tt>) Implement the function
+	Delete on a doubly linked list.  Demonstrate it by generating a list of
+	integers of length 10, choosing a random number from 1 to 10 inclusive,
+	and then calling delete(i) to delete that element.  Print the list before
+	the deletion, then print which element you will delete, then print the
+	list after deletion.
+	-->
+
+	<li>
+	<p>The TAs have provided functions <tt><b>get_expression</b></tt> and
+	<tt><b>get_next</b></tt> token that tokenize arithmetic expression. The
+	first function, <tt><b>get_expression</b></tt>, returns
+	<tt><b>True</b></tt> unless it reads a blank line or end of input. The
+	second function, get next token, returns <tt><b>False</b></tt> on error or
+	end of expression, but otherwise returns the next token, as a string. (A
+	token is the next high-level <i>thing</i>  in the expression, like '+' or
+	'*' or '4718'. You can see how they work by running the example called
+	<tt><b>test.py</b></tt>.</p>
+	
+	<p>The tokenizer is very simple and can probably be easily tricked into
+	doing bad things if you feed it bad input.  In particular, it doesn't
+	understand decimal points. It does understand parentheses, the four basic
+	arithmetic functions, and positive integers.  We will only test w/valid
+	input, as described here.</p>
+
+	<p>Write functions that use the tokenizer to read arithmetic
+	expressions:</p>
+		<ol>
+			<!--
+			<li>(Makefile target: in) inorder.py</li>
+			<li>(Makefile target: <b>pre</b>) preorder.py</li>
+			-->
+			<li>(Makefile target: <b>post</b>) postorder </li>
+		</ol>
+
+	<p>, each of which expects an expression in the given order. As you read
+	the expressions, you should build a parse tree (algorithm follows). Then
+	for each of these, it should print the expression, from the parse tree, in
+	pre-order, in-order, and post-order. Your program should expect to read
+	lines from stdin, much like test.py does.  One expression per line, assume
+	that expressions are correct (valid).</p>
+
+	<p>Output would be something like:</p>
+
+	<blockquote><tt>
+	<pre>pre:  + 3 2
+in: 3 + 2
+post: 3 2 +</pre></tt></blockquote>
+
+	<p>for each input expression.</p>
+
+	<h3>Parsing a Postfix Expression</h3>
+
+	<p>Consider a parse tree.  Each subtree is an expression.  We build larger
+	expressions from smaller ones.  Leaves are also expressions, simple
+	operands.</p>
+
+	<p>So, as you read an operand, wrap it in a single-node tree, and push it
+	onto a stack.  When you hit an operator, you will take 2 expressions
+	subtrees from the stack, combine them into a larger expressions tree, and
+	push that tree back onto the stack.  (Note that the order of the operands,
+	as they're popped from the stack, is important.  Try a couple small
+	examples using subtraction and division to check your algorithm.)</p>
+
+	<p>If the expression is correct, when you run out of tokens for a given
+	expression, there should be exactly one tree left on the stack.  Your
+	parse tree for the entire expression.</p>
+
+	<p>Note that you can use almost the same code for all of these, so this
+	isn't as hard as it may sound on first reading!</p>
+	</li>
+
+	<li>(Makefile target: <i>(No separate target)</i>) <b>Extra Credit:</b>
+	In the above exercises, also evaluate the arithmetic expressions and print
+	out the answer, so, output from the above targets (for each input
+	expression) would look like this:
+
+	<blockquote><tt>
+	<pre>pre:  + 3 2
+in: 3 + 2
+post: 3 2 +
+<font color='#990000'>eval: 5</font></pre></tt></blockquote>
+	
+	<p>Do the evaluation by recursively exploring the parse tree.  That is,
+	the value of the expression is the value of the root. The value of the
+	root is dependent on the values of its children. And so forth. Since
+	leaves are always numbers in our parse trees, their values are the values
+	of the numbers represented at the leaves.  You just need to handle four
+	operations.</p>
+
+	<p>To convert a string to an int:  <tt>op1 = int( token )</tt>.  This will
+	throw an exception if <tt>token</tt> is not something that can be
+	converted to an integer.</p>
+	</li>
+
+	<li> (Makefile target: <i>view</i>)  Display your source. </li>
+</ol>
+
+<h3> Representing Trees </h3>
+
+<p> You can write a simple, dumb class, or you can simply use Python lists
+as triplets:  <code>[ <var>Label</var>, <var>Left Child</var>, <var>Right
+Child</var> ]</code> . </p>
+
+<hr width='100%'>
+<p>We will be supplying our own input files to test with.  We will simply
+redirect input, for each given target (so, get the target names
+correct!).</p>
+
+<!-- hwrun
+<p>To see your stuff run, upon submission, create test target(s) which
+explicitly redirect the input, submit some test input files, and provide a
+target called <tt><b>run</b></tt> that depends on these test target(s):</p>
+
+<blockquote><tt>run: test_post</tt></blockquote>
+-->
+
+<p>A sample makefile, along w/sample input files, has been included.</p>
+
+<p>Here are some files for your use:</p>
+
+<ul>
+	<li><a target='260src' href='lexer.py'><tt><b>lexer.py</b></tt></a> -
+		functions that will break standard input up, in lines, and each line
+		into tokens.  <b>Do not modify!</b></li>
+	<li><a target='260src' href='test.py'><tt><b>test.py</b></tt></a> - a
+		sample driver, example of using the lexer functions</li>
+	<li><a target='260src' href='sample-post.input'><tt><b>sample-post.input
+		</b></tt></a> - sample input file</li>
+	<li><a target='260src' href='makefile'><tt><b>makefile</b></tt></a> - a
+		makefile for you to use.  Shouldn't require much modification (if
+		any)</li>
+</ul>
+
+</body>
+</html>
